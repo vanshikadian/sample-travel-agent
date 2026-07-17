@@ -79,10 +79,11 @@ The checks are split by cost, and that split is the scaling argument.
 | `honest_when_empty` | |
 | `no_looping` | |
 
-Scoring this agent cost four times more than running it, and took four times longer.
-That's measured, not estimated. At a million conversations a day, judging every one
-would roughly double the cost of the product, so rules run on everything and judges
-run on a sample. The two categories the customer called non-negotiable, PII and
+Scoring this agent cost roughly three times more than running it, and took four times
+longer. That's measured, not estimated: the agent runs about $0.007 a conversation
+and each conversation gets four judges on top. At a million conversations a day,
+judging every one would roughly quadruple the total cost, so rules run on everything
+and judges run on a sample. The two categories the customer called non-negotiable, PII and
 accidental booking, are both in the free column. That was deliberate: the tier that
 can never be sampled should be the tier that costs nothing to check.
 
