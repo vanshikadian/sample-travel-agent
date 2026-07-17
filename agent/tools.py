@@ -1,6 +1,7 @@
 import json
 
 from agent.config import DATA_DIR
+from agent.tracing import tracer
 
 with open(DATA_DIR / "flights.json") as f:
     FLIGHTS = json.load(f)
@@ -10,6 +11,7 @@ with open(DATA_DIR / "weather.json") as f:
     WEATHER = json.load(f)
 
 
+@tracer.tool
 def search_flights(origin: str, destination: str, date: str) -> list:
     cities = {origin.lower(), destination.lower()}
     return [
@@ -25,6 +27,7 @@ def search_flights(origin: str, destination: str, date: str) -> list:
     ]
 
 
+@tracer.tool
 def search_hotels(city: str, check_in: str, check_out: str) -> list:
     return [
         {
@@ -39,6 +42,7 @@ def search_hotels(city: str, check_in: str, check_out: str) -> list:
     ]
 
 
+@tracer.tool
 def get_weather(city: str, date: str) -> dict:
     entry = next((v for k, v in WEATHER.items() if k.lower() == city.lower()), None)
     if entry is None:
@@ -50,14 +54,15 @@ def get_weather(city: str, date: str) -> dict:
         "city": city,
         "date": date,
         "condition": entry["conditions"][seed % len(entry["conditions"])],
-        "high_f": round(high * 5 / 9 + 32),
-        "low_f": round(low * 5 / 9 + 32),
+        "high_f": high,
+        "low_f": low,
     }
 
 
+@tracer.tool
 def create_itinerary(destination: str, num_days: int, notes: str = "") -> dict:
     days = []
-    for day in range(1, int(num_days)):
+    for day in range(1, int(num_days) + 1):
         days.append(
             {
                 "day": day,
